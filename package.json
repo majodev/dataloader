@@ -63,6 +63,8 @@
   "scripts": {
     "test": "npm run lint && npm run check && npm run testonly",
     "testonly": "babel-node ./node_modules/.bin/_mocha $npm_package_options_mocha",
+    "test-bluebird": "npm run lint && npm run check && npm run testonly-bluebird",
+    "testonly-bluebird": "USE_BLUEBIRD=true babel-node ./node_modules/.bin/_mocha $npm_package_options_mocha",
     "lint": "eslint src",
     "check": "flow check",
     "build": "babel src --ignore __tests__ --out-dir dist/ ; cp src/index.js dist/index.js.flow ; cp src/index.d.ts dist/",
@@ -99,6 +101,7 @@
     "babel-plugin-transform-es2015-template-literals": "6.8.0",
     "babel-plugin-transform-flow-strip-types": "6.14.0",
     "babel-plugin-transform-regenerator": "6.14.0",
+    "bluebird": "^3.4.7",
     "chai": "3.5.0",
     "coveralls": "2.11.14",
     "eslint": "3.5.0",

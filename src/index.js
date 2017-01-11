@@ -30,6 +30,14 @@ type CacheMap<K, V> = {
   clear(): any;
 };
 
+let ES6Promise = global.Promise;
+
+// Allow to set custom Promise implementation (e.g. Bluebird)
+export function setES6PromiseImplementation(customES6Promise: any) {
+  global.Promise = customES6Promise; // global needs to be patch for ES6 await
+  ES6Promise = customES6Promise;
+}
+
 /**
  * A `DataLoader` creates a public API for loading data from a particular
  * data back-end with unique keys such as the `id` column of a SQL table or
@@ -91,7 +99,7 @@ export default class DataLoader<K, V> {
     }
 
     // Otherwise, produce a new Promise for this value.
-    var promise = new Promise((resolve, reject) => {
+    var promise = new ES6Promise((resolve, reject) => {
       // Enqueue this Promise to be dispatched.
       this._queue.push({ key, resolve, reject });
 

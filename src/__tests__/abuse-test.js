@@ -10,7 +10,16 @@
 
 import { expect } from 'chai';
 import { describe, it } from 'mocha';
-import DataLoader from '../';
+import DataLoader, { setES6PromiseImplementation } from '../';
+
+let Promise = global.Promise;
+
+if (process.env.USE_BLUEBIRD) {
+  global.Promise = require('bluebird'); // global patch for ES6 await
+  Promise = global.Promise;
+}
+
+setES6PromiseImplementation(Promise);
 
 describe('Provides descriptive error messages for API abuse', () => {
 

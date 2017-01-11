@@ -112,3 +112,5 @@ export class DataLoader<K, V> {
    */
   prime(key: K, value: V): DataLoader<K, V>;
 }
+
+export function setES6PromiseImplementation(customES6PromiseImplementation): void

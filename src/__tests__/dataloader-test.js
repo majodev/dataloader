@@ -10,7 +10,16 @@
 
 import { expect } from 'chai';
 import { describe, it } from 'mocha';
-import DataLoader from '../';
+import DataLoader, { setES6PromiseImplementation } from '../';
+
+let Promise = global.Promise;
+
+if (process.env.USE_BLUEBIRD) {
+  global.Promise = require('bluebird'); // global patch for ES6 await
+  Promise = global.Promise;
+}
+
+setES6PromiseImplementation(Promise);
 
 function idLoader(options) {
   var loadCalls = [];
@@ -725,6 +734,23 @@ describe('It is resilient to job queue ordering', () => {
     expect(aLoadCalls).to.deep.equal([ [ 'A1', 'A2' ] ]);
     expect(bLoadCalls).to.deep.equal([ [ 'B1', 'B2' ] ]);
     expect(deepLoadCalls).to.deep.equal([ [ [ 'A1', 'A2' ], [ 'B1', 'B2' ] ] ]);
+  });
+
+});
+
+describe('Custom promise implementation', () => {
+
+  it('can switch to another promise implementation', () => {
+    setES6PromiseImplementation(global.Promise);
+
+    const promise1 = global.Promise.resolve();
+    expect(promise1).to.be.instanceof(global.Promise);
+
+    if (process.env.USE_BLUEBIRD) {
+      expect(global.Promise).to.haveOwnProperty('version');
+    } else {
+      expect(global.Promise).not.to.haveOwnProperty('version');
+    }
   });
 
 });
